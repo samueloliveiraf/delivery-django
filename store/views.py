@@ -11,7 +11,7 @@ def store(request):
     cartItems = data['cartItems']
     items = data['items']
 
-    establishment = Establishment.objects.filter(id=1)
+    establishment = Establishment.objects.get()
     categorys = Category.objects.all()
     products = Product.objects.all()
 

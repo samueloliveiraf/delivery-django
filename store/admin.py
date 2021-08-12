@@ -8,5 +8,6 @@ admin.site.register([
     OrderItem,
     Category,
     Product,
+    Establishment,
 ])
 

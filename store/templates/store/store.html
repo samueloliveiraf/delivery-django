@@ -2,6 +2,10 @@
 {% load static %}
 {% block content %}
 
+{% if establishments.establishment == True %}
+
+<button class="btn btn-success">ABERTO!</button>
+
 {% for category in categorys %}
 <div class="category-card"> {{ category.title }}</div>
 
@@ -22,13 +26,11 @@
 
 					<p><strong style="font-size: 12px;"> R$ {{ product.price }}</strong></p>
 					<div class="row row-btn">
-						<button data-product="{{product.id}}" data-action="remove"
-							class="but-add add-btn update-cart">
+						<button data-product="{{product.id}}" data-action="remove" class="but-add add-btn update-cart">
 							-
 						</button>
 
-						<button data-product="{{product.id}}" data-action="add"
-							class="but-add add-btn update-cart">
+						<button data-product="{{product.id}}" data-action="add" class="but-add add-btn update-cart">
 							+
 						</button>
 					</div>
@@ -43,5 +45,16 @@
 </div>
 
 {% endfor %}
+
+{% else %}
+<div class="d-flex justify-content-center">
+	<div class="col">
+		<button class="btn btn-danger">FECHADO!</button>
+		<p class="text-close">
+			Horario de Funcionamento das 14h às 22h De segunda a Sexta, Sábado das 18h às 22h |Domingo Fechado|
+		</p>
+	</div>
+</div>
+{% endif %}
 
 {% endblock content %}

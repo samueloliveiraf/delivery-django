@@ -293,3 +293,20 @@ footer {
 	margin: 10px;
 }
 
+.btn-danger {  
+	z-index: 30;
+	margin-top: 10px;
+}
+
+.text-close {
+	color: white;
+	margin-top: 10px;
+}
+
+.d-flex {
+	border: 1px solid #141414;
+	padding: 4px;
+	border-radius: 4px;
+	background: #141414;
+}
+

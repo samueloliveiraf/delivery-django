@@ -1,0 +1,9 @@
+
+/venv
+/.vscode
+/.mypy_cache
+.idea
+*pyc
+.env
+
+db.sqlite3

@@ -1,0 +1,174 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+
+	<div class="col-lg-6">
+		<div class="box-element">
+			<a class="btn btn-dark" href="{% url 'cart' %}">&#x2190; Voltar para o Carrinho</a>
+			<hr>
+			<h3>Resumo do pedido</h3>
+			<hr>
+			{% for item in items %}
+			<div class="cart-row">
+				<div style="flex:2;"><img style="border-radius: 4px;" class="row-image" src="{{item.product.imageURL}}">
+				</div>
+				<div style="flex:2">
+					<p>{{item.product.name}}</p>
+				</div>
+				<div style="flex:1">
+					<p>${{item.product.price|floatformat:2}}</p>
+				</div>
+				<div style="flex:1">
+					<p>x{{item.quantity}}</p>
+				</div>
+			</div>
+			{% endfor %}
+			<h5>Items: {{order.get_cart_items}}</h5>
+			<h5>Total: ${{order.get_cart_total|floatformat:2}} O PEDIDO MINÍMO É DE 15,00 REAIS</h5>
+			<p>Frete Grátis</p>
+		</div>
+	</div>
+
+	<div class="col-lg-6">
+		<div class="box-element" id="form-wrapper">
+			<form id="form" action="submit" method="POST">{% csrf_token %}
+				<div id="user-info">
+				
+				</div>
+
+				<div id="shipping-info">
+					<hr>
+					<p>Informações para a entrega:</p>
+					<hr>
+					<div class="form-field">
+						<input required class="form-control" type="text" name="name" placeholder="Nome...">
+					</div>
+					<div class="form-field">
+						<input required class="form-control" type="text" name="district" placeholder="Bairro...">
+					</div>
+					<div class="form-field">
+						<input required class="form-control" type="text" name="address" placeholder="Rua...">
+					</div>
+					<div class="form-field">
+						<input required class="form-control" type="text" name="number" placeholder="Numero...">
+					</div>
+
+					<div class="form-field">
+						<input required class="form-control" type="text" name="complement" placeholder="Ponto de referencia...">
+					</div>
+
+					<div class="form-field">
+						<input class="form-control" placeholder="Observação: Exemplo: (retirar cebola)" name="message">
+					</div>
+
+					<div class="form-group">
+						<label>Selecione a unidade</label><br>
+						<select class="form-control" id="forma-payment" name="payment">
+							<option value="0" disabled="true" selected="true">Selecione a forma de pagamento</option>
+							<option name="dinheiro" value="dinheiro">Dinheiro</option>
+							<option name="cartao-credito" value="cartao-credito">Cartão de Crédito</option>
+							<option name="cartao-debito" value="cartao-debito">Cartão de Debito</option>
+						</select>
+					</div>
+
+				</div>
+				<hr>
+				<input id="form-button" class="btn btn-success btn-block" type="submit" value="Fazer pedido">
+
+			</form>
+		</div>
+
+		<br>
+		<div class="box-element hidden" id="payment-info">
+			<small class="btn btn-success btn-block">Seu pedido foi realizado!</small>
+			<!--<button id="make-payment">Make payment</button>-->
+			<div id="paypal-button-container"></div>
+		</div>
+
+	</div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR-CLIENT-ID&currency=USD&disable-funding=credit"></script>
+
+<script>
+	var total = '{{order.get_cart_total}}'
+
+</script>
+
+<script type="text/javascript">
+
+	document.querySelector("#forma-payment").onchange = function () {
+		var n = this.options[this.selectedIndex].getAttribute("name");
+		var d = document.querySelectorAll("#payment div");
+		for (var x = 0; x < d.length; x++) {
+			d[x].style.display = ~d[x].className.indexOf(n) ? "block" : "none";
+		}
+	}
+
+	var shipping = '{{order.shipping}}'
+
+
+	if (shipping == false) {
+		document.getElementById('shipping-info').innerHTML = ''
+	}
+
+	if (user != 'AnonymousUser') {
+		document.getElementById('user-info').innerHTML = ''
+	}
+
+
+	var form = document.getElementById('form')
+	form.addEventListener('submit', function (e) {
+		e.preventDefault()
+		document.getElementById('form-button').classList.add("hidden");
+		document.getElementById('payment-info').classList.remove("hidden");
+		window.open(`https://api.whatsapp.com/send?phone=5583996495006&text=
+		------------Inicio Pedido------------ %0A
+		 Nome: ${form.name.value} %0A
+		 Bairro: ${form.district.value} %0A
+		 Rua: ${form.address.value} %0A
+		 Complemento: ${form.complement.value} %0A
+		 Número: ${form.number.value} %0A
+		 Pagamento: ${form.payment.value} %0A
+		 INFORMAÇÕES DO PEDIDO:
+		 {% for item in items %}
+		 {{item.product.name}} %0A
+		 Quantidade: {{item.quantity}} %0A  
+		 {% endfor %}
+		 OBSERVAÇÃO: ${form.message.value} %0A
+		 ------------Fim Pedido------------`
+		)
+	})
+
+	function submitFormData() {
+
+		var userFormData = {
+			'name': null,
+			'email': null,
+			'total': total,
+		}
+
+		var shippingInfo = {
+			'district': null,
+			'address': null,
+			'complement': null,
+			'payment': null,
+			'number': null,
+		}
+
+		if (shipping != false) {
+			shippingInfo.district = form.district.value
+			shippingInfo.address = form.address.value
+			shippingInfo.complement = form.complement.value
+			shippingInfo.payment = form.payment.value
+			shippingInfo.number = form.number.value
+		}
+
+		var url = "/process_order/"
+
+	}
+</script>
+
+{% endblock content %}

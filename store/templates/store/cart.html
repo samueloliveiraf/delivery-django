@@ -1,0 +1,67 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+	<div class="col-lg-12">
+		<div class="box-element">
+
+			<a class="btn btn-dark" href="{% url 'store' %}">&#x2190; Continue comprando</a>
+
+			<br>
+			<br>
+			<table class="table">
+				<tr>
+					<th>
+						<h5>Items: <strong>{{order.get_cart_items}}</strong></h5>
+					</th>
+					<th>
+						<h5>Total:<strong> ${{order.get_cart_total|floatformat:2}}</strong></h5>
+					</th>
+					<th>
+						<a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Ir para
+							o pedido</a>
+					</th>
+				</tr>
+			</table>
+
+		</div>
+
+		<br>
+		<table class="table box-element">
+			<thead>
+				<tr>
+					<th scope="col">Item</th>
+					<th scope="col">Preço</th>
+					<th scope="col">Qtd</th>
+					<th scope="col">Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in items %}
+				<tr>
+					<th>{{item.product.name}}</th>
+					<th>${{item.product.price|floatformat:2}}</th>
+					<th>
+						<div class="quantity">
+							<button data-product="{{item.product.id}}" data-action="remove"
+								class="btn btn-dark add-btn update-cart">
+								-
+							</button>
+							<p style="margin-left: 10px;" class="quantity">{{item.quantity}}</p>
+							<button data-product="{{item.product.id}}" data-action="add"
+								class="btn btn-dark add-btn update-cart">
+								+
+							</button>
+						</div>
+					</th>
+					<th>
+						${{item.get_total|floatformat:2}}
+					</th>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	</div>
+</div>
+{% endblock content %}

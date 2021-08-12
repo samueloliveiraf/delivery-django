@@ -1,0 +1,47 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+{% for category in categorys %}
+<div class="category-card"> {{ category.title }}</div>
+
+<div class="carrosel-filmes">
+	<div class="owl-carousel owl-theme">
+		{% for product in products %}
+
+		{% if product.category == category %}
+		<div class="col item-col">
+			<div class="item image-item">
+				<img class="box-filme" src="{{product.imageURL}}" alt="">
+			</div>
+			<div class="item descricao-item">
+				<div class="col">
+					<strong style="font-size: 10px;">{{product.name}}</strong>
+					<p style="font-size: 10px; text-align: initial;">{{ product.details }}</p>
+
+
+					<p><strong style="font-size: 12px;"> R$ {{ product.price }}</strong></p>
+					<div class="row row-btn">
+						<button data-product="{{product.id}}" data-action="remove"
+							class="but-add add-btn update-cart">
+							-
+						</button>
+
+						<button data-product="{{product.id}}" data-action="add"
+							class="but-add add-btn update-cart">
+							+
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{% endif %}
+
+		{% endfor %}
+	</div>
+</div>
+
+{% endfor %}
+
+{% endblock content %}

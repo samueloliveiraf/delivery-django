@@ -1,4 +1,4 @@
-### Projeto DJANGO para pedidos de Delivery enviados para o Whatsap
+### Projeto DJANGO para pedidos de Delivery enviados para o whatsapp
 
 1 - >git clone https://github.com/samueloliveiraf/delivery-django/
 
